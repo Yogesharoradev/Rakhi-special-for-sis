@@ -19,22 +19,20 @@ export default function MusicPlaylist() {
     audio.load();
 
     const playCurrent = async () => {
-      if (switching) return;
       try {
         await audio.play();
       } catch (error) {
-        // Browser autoplay policy: the Enter button will retry playback.
+        console.warn('Rakhi music needs a user gesture:', error);
       }
     };
 
     const handleEnded = async () => {
+      if (switching) return;
       switching = true;
       trackIndex = (trackIndex + 1) % TRACKS.length;
       audio.src = TRACKS[trackIndex];
       audio.load();
-      try {
-        await audio.play();
-      } catch {}
+      try { await audio.play(); } catch {}
       switching = false;
     };
 
@@ -47,16 +45,24 @@ export default function MusicPlaylist() {
       switching = false;
     };
 
+    const handleFirstClick = (event) => {
+      const button = event.target.closest('button');
+      if (!button) return;
+      const text = button.textContent?.toLowerCase() || '';
+      if (text.includes('enter your surprise')) playCurrent();
+    };
+
     audio.addEventListener('ended', handleEnded);
     audio.addEventListener('error', handleError);
+    document.addEventListener('click', handleFirstClick, true);
 
-    // Expose a reliable starter for the Enter button.
     audio.dataset.rakhiPlaylistReady = 'true';
     window.startRakhiMusic = playCurrent;
 
     return () => {
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('error', handleError);
+      document.removeEventListener('click', handleFirstClick, true);
       delete window.startRakhiMusic;
     };
   }, []);

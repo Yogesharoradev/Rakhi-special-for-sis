@@ -1,79 +1,115 @@
-import { useState } from 'react';
+import { useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Heart, Gift, Sparkles, MapPin } from 'lucide-react';
-import { Canvas } from '@react-three/fiber';
-import { Float, Stars, OrbitControls } from '@react-three/drei';
+import { Gift, Heart, MapPin, Sparkles } from 'lucide-react';
+import * as THREE from 'three';
 import './styles.css';
 
+const memories = [
+  ['😂', 'Our chaos', 'The jokes, fights and nonsense that only we understand.'],
+  ['📸', 'Our memories', 'A few more photos will turn this into our little scrapbook.'],
+  ['🤫', 'Our secrets', 'Some stories are permanently classified between siblings.'],
+  ['🫶', 'Our bond', 'Australia can be far away. Our bond is not.'],
+];
+
 function Rakhi3D() {
-  return <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
-    <ambientLight intensity={2} />
-    <pointLight position={[3, 3, 4]} intensity={20} />
-    <Float speed={2} rotationIntensity={1.5} floatIntensity={1.5}>
-      <mesh rotation={[0.2, 0.2, 0]}>
-        <torusGeometry args={[1.35, 0.16, 32, 96]} />
-        <meshStandardMaterial color="#ff6f91" metalness={0.35} roughness={0.25} />
-      </mesh>
-      <mesh position={[0, 0, 0.05]}>
-        <sphereGeometry args={[0.58, 48, 48]} />
-        <meshStandardMaterial color="#ffd166" metalness={0.5} roughness={0.18} />
-      </mesh>
-    </Float>
-    <Stars radius={40} depth={20} count={700} factor={3} fade speed={1} />
-    <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.6} />
-  </Canvas>;
+  const group = useRef();
+  const bead = useRef();
+  useFrame(({ clock }, delta) => {
+    if (!group.current) return;
+    group.current.rotation.y += delta * 0.32;
+    group.current.rotation.x = Math.sin(clock.elapsedTime * 0.8) * 0.12;
+    group.current.position.y = Math.sin(clock.elapsedTime * 1.2) * 0.18;
+    if (bead.current) bead.current.rotation.z += delta * 0.6;
+  });
+
+  const petals = Array.from({ length: 8 }, (_, i) => {
+    const a = (i / 8) * Math.PI * 2;
+    return <mesh key={i} position={[Math.cos(a) * 0.62, Math.sin(a) * 0.62, 0]} scale={[0.34, 0.18, 0.12]} rotation={[0, 0, a]}>
+      <sphereGeometry args={[1, 24, 16]} />
+      <meshStandardMaterial color="#d86f87" roughness={0.3} metalness={0.2} />
+    </mesh>;
+  });
+
+  return <group ref={group}>
+    <mesh rotation={[0, 0, 0]}>
+      <torusGeometry args={[1.25, 0.09, 24, 96]} />
+      <meshStandardMaterial color="#e2a1b0" roughness={0.25} metalness={0.45} />
+    </mesh>
+    {petals}
+    <mesh ref={bead} position={[0, 0, 0.18]}>
+      <icosahedronGeometry args={[0.42, 2]} />
+      <meshStandardMaterial color="#f2c766" roughness={0.16} metalness={0.75} />
+    </mesh>
+    <mesh position={[0, 0, 0.48]}>
+      <sphereGeometry args={[0.1, 20, 20]} />
+      <meshStandardMaterial color="#fff3c7" emissive="#ffd87a" emissiveIntensity={0.8} />
+    </mesh>
+  </group>;
+}
+
+function Particles() {
+  const ref = useRef();
+  const count = 90;
+  const positions = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 7;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 6;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 3;
+  }
+  useFrame(({ clock }) => { if (ref.current) ref.current.rotation.y = clock.elapsedTime * 0.025; });
+  return <points ref={ref}><bufferGeometry><bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} /></bufferGeometry><pointsMaterial size={0.035} color="#e5a7b5" transparent opacity={0.75} /></points>;
+}
+
+function ThreeScene() {
+  return <div className="three-scene" aria-hidden="true"><Canvas camera={{ position: [0, 0, 5.5], fov: 42 }} dpr={[1, 1.5]}>
+    <ambientLight intensity={1.8} />
+    <pointLight position={[3, 4, 4]} intensity={16} color="#ffd9e1" />
+    <pointLight position={[-4, -2, 2]} intensity={9} color="#ffe4a8" />
+    <Rakhi3D />
+    <Particles />
+  </Canvas></div>;
 }
 
 export default function App() {
-  const [open, setOpen] = useState(false);
-  const celebrate = () => {
-    setOpen(true);
-    confetti({ particleCount: 180, spread: 100, origin: { y: 0.65 } });
-  };
+  const celebrate = () => confetti({ particleCount: 180, spread: 110, startVelocity: 32, origin: { y: 0.62 } });
   return <main>
     <section className="hero">
-      <div className="aurora" />
-      <motion.div className="badge" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-        <MapPin size={15} /> India 🇮🇳 → Australia 🇦🇺
+      <ThreeScene />
+      <div className="hero-glow" />
+      <motion.div className="hero-content" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+        <div className="eyebrow">🇮🇳 India <span>→</span> Australia 🇦🇺</div>
+        <p className="distance">A Rakhi surprise across the miles</p>
+        <h1>For my favourite<br /><em>person to annoy.</em> ❤️</h1>
+        <p className="subtext">You are thousands of kilometres away, so I made something that can travel instantly.</p>
+        <motion.button className="primary-btn" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }} onClick={celebrate}><Gift size={19} /> Open your surprise</motion.button>
+        <p className="scroll-hint">scroll down ↓</p>
       </motion.div>
-      <motion.h1 initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .15 }}>
-        For my favourite<br /><span>annoying sister. ❤️</span>
-      </motion.h1>
-      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .35 }}>
-        Distance can change where we are. Never what we are.
-      </motion.p>
-      <div className="scene"><Rakhi3D /></div>
-      <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: .97 }} onClick={celebrate}>
-        <Gift size={19} /> Open your Rakhi surprise
-      </motion.button>
     </section>
 
-    <section className="story">
-      <div className="eyebrow"><Sparkles size={16}/> A tiny corner of the internet, just for you</div>
+    <section className="intro section-pad"><div className="paper-card">
+      <span className="tiny-label">DEAR SIS,</span>
       <h2>Rakhi ka gift courier se nahi bheja…</h2>
       <p>Kyuki jo gift dena tha, woh parcel mein fit hi nahi hota. 🥹</p>
-      <div className="memory-grid">
-        {['Our chaos', 'Our memories', 'Our bond'].map((x, i) => <motion.div className="memory" key={x} whileHover={{ y: -7, rotate: i % 2 ? 1 : -1 }}><div className="photo-placeholder">📸</div><strong>{x}</strong><span>Photo yahan daalni hai</span></motion.div>)}
-      </div>
+      <p>Isliye ek chhota sa corner of the internet bana diya — sirf tere liye.</p>
+      <div className="signature">— tera annoying bhai <Heart size={16} fill="currentColor" /></div>
+    </div></section>
+
+    <section className="memories section-pad"><div className="section-heading"><span>OUR LITTLE WORLD</span><h2>Things only <em>we</em> understand.</h2></div>
+      <div className="memory-grid">{memories.map(([emoji, title, text], i) => <motion.article key={title} className="memory-card" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} whileHover={{ y: -8, rotate: i % 2 ? 1 : -1 }}>
+        <div className="memory-emoji">{emoji}</div><h3>{title}</h3><p>{text}</p><span className="card-number">0{i + 1}</span>
+      </motion.article>)}</div>
     </section>
 
-    <section className="letter">
-      <div className="letter-card">
-        <Heart fill="currentColor" />
-        <h2>Dear Sis,</h2>
-        <p>Australia kitna bhi door ho, Rakhi wale din teri kami thodi extra feel hoti hai.</p>
-        <p>Hum roz baat karein ya na karein, tu meri life ka woh part hai jo distance se kabhi door nahi ho sakta.</p>
-        <p>Khush reh, apne dreams chase kar — aur haan, kabhi kabhi apne bhai ko yaad bhi kar liya kar. 😂</p>
-        <b>Happy Raksha Bandhan ❤️</b>
-        <small>— Tera Bhai</small>
-      </div>
-    </section>
-
-    {open && <motion.div className="modal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setOpen(false)}>
-      <motion.div className="modal-card" initial={{ scale: .7, rotate: -5 }} animate={{ scale: 1, rotate: 0 }} onClick={e => e.stopPropagation()}>
-        <div className="big-rakhi">🧿</div><h2>Distance: 10,000+ km</h2><div className="infinity">∞ ❤️</div><p>Bond: forever.</p><button onClick={() => setOpen(false)}>Okay, emotional kar diya 🥹</button>
+    <section className="letter-section section-pad"><div className="letter-wrap">
+      <div className="letter-top"><span>A MESSAGE FROM HOME</span><Sparkles size={18} /></div>
+      <h2>Some things are easier<br /><em>to write than say.</em></h2>
+      <motion.div className="envelope" whileHover={{ scale: 1.025 }} whileTap={{ scale: .98 }} onClick={celebrate}>
+        <div className="envelope-flap" /><Heart size={42} fill="currentColor" /><span>Tap for a little love ❤️</span>
       </motion.div>
-    </motion.div>}
+    </div></section>
+
+    <section className="finale section-pad"><MapPin size={18} /><p>Australia 🇦🇺 ↔ India 🇮🇳</p><h2>Distance: a lot.<br /><em>Love: unlimited.</em></h2><button className="primary-btn" onClick={celebrate}>Send some love ✨</button><p className="footer-note">Happy Raksha Bandhan, sis. ❤️</p></section>
   </main>;
 }

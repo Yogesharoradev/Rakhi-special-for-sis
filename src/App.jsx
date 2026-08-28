@@ -3,26 +3,551 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import {
-  Heart, Volume2, VolumeX, MapPin, Sparkles, ArrowDown, X, Plane,
-  LockKeyhole, ChevronRight, ChevronLeft, Camera, Star,
+  Heart,
+  Volume2,
+  VolumeX,
+  MapPin,
+  Sparkles,
+  ArrowDown,
+  X,
+  Plane,
+  LockKeyhole,
+  ChevronRight,
+  ChevronLeft,
+  Camera,
+  Star,
 } from "lucide-react";
 import MediaGallery from "./MediaGallery.jsx";
 import "./styles-cinematic.css";
 
 const memories = [
-  { image:"https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1200&q=85", emoji:"😂", title:"Hum Teen Ka Hungama", kicker:"CHAPTER 01", text:"Hum teen ki kahani kabhi shaant reh hi nahi sakti thi. Do bhai aur humari sabse choti behen — protect bhi karte the aur mauka milte hi tang bhi. TV ka remote, last wali mithai aur kiski galti thi… har choti baat ka full court case lagta tha.", detail:"Bachpan mein laga ye normal hai. Aaj wahi normal moments sabse zyada yaad aate hain — bina plan ke saath baithna, ek dusre ki complain karna, mummy papa se bachne ke liye team bana lena aur phir kisi ek ki hasi dekh kar sabka hasna. Hum teen alag personalities hain, par saath milke ek complete madness hain." },
-  { image:"https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?auto=format&fit=crop&w=1200&q=85", emoji:"📸", title:"Choti Si Tu, Badi Si Kahani", kicker:"CHAPTER 02", text:"Tu hum dono se choti thi, isliye ghar ki unofficial VIP bhi thi. Kabhi hum dono tere against team bana lete, kabhi tu dono bhaiyon ko alag alag use karke apna kaam nikalwa leti. Aur haan, drama pehchanne ke baad bhi hum maan jaate the.", detail:"Time ke saath tu badi hoti gayi aur hum apni duniya mein busy hote gaye. Lekin ek call ya random message aaj bhi hum teen ko wahi purane version mein le aata hai — ek bhai serious advice, doosra faltu joke, aur tu dono ko ignore karke apni baat manwa leti hai." },
-  { image:"https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=85", emoji:"🤫", title:"Hum Teen Ki Apni Language", kicker:"CHAPTER 03", text:"Har family ke paas kuch jokes aur references hote hain jo bahar wale kabhi nahi samajh sakte. Humare paas toh poori dictionary hai. Ek look, ek word, ek purani incident ki aadhi line — aur hum teen samajh jaate hain.", detail:"Australia mein tu apni life jee rahi hai, hum yahan apni. Time zones alag hain, routines alag hain, lekin jab hum teen call par aa jaate hain toh lagta hi nahi ki itna time beet gaya. Humari language kisi country ki nahi — woh bas hum teen ki hai." },
-  { image:"https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=1200&q=85", emoji:"🫶", title:"Australia Tak Ka Fasla", kicker:"CHAPTER 04", text:"Phir tu Australia chali gayi. Excitement bhi tha, pride bhi tha, aur woh ajeeb feeling bhi ki ab hum teen ek hi ghar mein nahi honge. Pehle kisi room se awaaz aa jaati thi; ab phone uthate hue pehle time zone dekhna padta hai.", detail:"Dono bhaiyon ki taraf se ek baat hamesha yaad rakhna: humein tere upar genuinely bahut pride hai. Tu apni life build kar rahi hai. Haan, miss karte hain, lekin distance ne sirf geography badli hai. Tu humari choti behen thi, hai aur rahegi." },
+  {
+    image:
+      "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1200&q=85",
+    emoji: "😂",
+    title: "Hum Teen Ka Hungama",
+    kicker: "CHAPTER 01",
+    text: "Hum teen ki kahani kabhi shaant reh hi nahi sakti thi. Do bhai aur humari sabse choti behen — protect bhi karte the aur mauka milte hi tang bhi. TV ka remote, last wali mithai aur kiski galti thi… har choti baat ka full court case lagta tha.",
+    detail:
+      "Bachpan mein laga ye normal hai. Aaj wahi normal moments sabse zyada yaad aate hain — bina plan ke saath baithna, ek dusre ki complain karna, mummy papa se bachne ke liye team bana lena aur phir kisi ek ki hasi dekh kar sabka hasna. Hum teen alag personalities hain, par saath milke ek complete madness hain.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?auto=format&fit=crop&w=1200&q=85",
+    emoji: "📸",
+    title: "Choti Si Tu, Badi Si Kahani",
+    kicker: "CHAPTER 02",
+    text: "Tu hum dono se choti thi, isliye ghar ki unofficial VIP bhi thi. Kabhi hum dono tere against team bana lete, kabhi tu dono bhaiyon ko alag alag use karke apna kaam nikalwa leti. Aur haan, drama pehchanne ke baad bhi hum maan jaate the.",
+    detail:
+      "Time ke saath tu badi hoti gayi aur hum apni duniya mein busy hote gaye. Lekin ek call ya random message aaj bhi hum teen ko wahi purane version mein le aata hai — ek bhai serious advice, doosra faltu joke, aur tu dono ko ignore karke apni baat manwa leti hai.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=85",
+    emoji: "🤫",
+    title: "Hum Teen Ki Apni Language",
+    kicker: "CHAPTER 03",
+    text: "Har family ke paas kuch jokes aur references hote hain jo bahar wale kabhi nahi samajh sakte. Humare paas toh poori dictionary hai. Ek look, ek word, ek purani incident ki aadhi line — aur hum teen samajh jaate hain.",
+    detail:
+      "Australia mein tu apni life jee rahi hai, hum yahan apni. Time zones alag hain, routines alag hain, lekin jab hum teen call par aa jaate hain toh lagta hi nahi ki itna time beet gaya. Humari language kisi country ki nahi — woh bas hum teen ki hai.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=1200&q=85",
+    emoji: "🫶",
+    title: "Australia Tak Ka Fasla",
+    kicker: "CHAPTER 04",
+    text: "Phir tu Australia chali gayi. Excitement bhi tha, pride bhi tha, aur woh ajeeb feeling bhi ki ab hum teen ek hi ghar mein nahi honge. Pehle kisi room se awaaz aa jaati thi; ab phone uthate hue pehle time zone dekhna padta hai.",
+    detail:
+      "Dono bhaiyon ki taraf se ek baat hamesha yaad rakhna: humein tere upar genuinely bahut pride hai. Tu apni life build kar rahi hai. Haan, miss karte hain, lekin distance ne sirf geography badli hai. Tu humari choti behen thi, hai aur rahegi.",
+  },
 ];
 const chapters = [
-  ["The beginning","Do bhai, ek choti behen. Ek ghar. Aur unlimited bakchodi."],
-  ["The middle","Fights, secrets, hasi, complaints aur woh ordinary days jo aaj golden memories lagte hain."],
-  ["The distance","Choti behen Australia gayi aur hum teen ki story ne ek naya chapter start kiya."],
-  ["Right now","Different time zones, different routines — par group chat aur bond wahi purana."],
-  ["Always","Duniya ke kisi bhi corner mein chale jao, hum teen ki jagah ek dusre ki life mein fixed hai."],
+  [
+    "The beginning",
+    "Do bhai, ek choti behen. Ek ghar. Aur unlimited bakchodi.",
+  ],
+  [
+    "The middle",
+    "Fights, secrets, hasi, complaints aur woh ordinary days jo aaj golden memories lagte hain.",
+  ],
+  [
+    "The distance",
+    "Choti behen Australia gayi aur hum teen ki story ne ek naya chapter start kiya.",
+  ],
+  [
+    "Right now",
+    "Different time zones, different routines — par group chat aur bond wahi purana.",
+  ],
+  [
+    "Always",
+    "Duniya ke kisi bhi corner mein chale jao, hum teen ki jagah ek dusre ki life mein fixed hai.",
+  ],
 ];
-function Rakhi3D(){const group=useRef(),gem=useRef();useFrame(({clock},delta)=>{if(!group.current)return;group.current.rotation.y+=delta*.24;group.current.rotation.x=Math.sin(clock.elapsedTime*.7)*.09;group.current.position.y=Math.sin(clock.elapsedTime*1.1)*.15;if(gem.current)gem.current.rotation.z+=delta*.55});const petals=Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2;return <mesh key={i} position={[Math.cos(a)*.68,Math.sin(a)*.68,0]} scale={[.3,.15,.1]} rotation={[0,0,a]}><sphereGeometry args={[1,20,14]}/><meshStandardMaterial color="#d66f88" roughness={.28} metalness={.25}/></mesh>});return <group ref={group}><mesh><torusGeometry args={[1.3,.085,24,96]}/><meshStandardMaterial color="#e4a3b1" roughness={.22} metalness={.5}/></mesh>{petals}<mesh ref={gem} position={[0,0,.18]}><icosahedronGeometry args={[.43,2]}/><meshStandardMaterial color="#f4ca67" roughness={.14} metalness={.8} emissive="#7a4f10" emissiveIntensity={.12}/></mesh><mesh position={[0,0,.5]}><sphereGeometry args={[.105,20,20]}/><meshStandardMaterial color="#fff4ca" emissive="#ffd66e" emissiveIntensity={1.1}/></mesh></group>}
-function Particles(){const ref=useRef(),count=130,positions=new Float32Array(count*3);for(let i=0;i<count;i++){positions[i*3]=(Math.random()-.5)*8;positions[i*3+1]=(Math.random()-.5)*7;positions[i*3+2]=(Math.random()-.5)*3}useFrame(({clock})=>{if(ref.current)ref.current.rotation.y=clock.elapsedTime*.02});return <points ref={ref}><bufferGeometry><bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3}/></bufferGeometry><pointsMaterial size={.032} color="#e6a9b7" transparent opacity={.72}/></points>}
-function ThreeScene(){return <div className="three-scene" aria-hidden="true"><Canvas camera={{position:[0,0,5.6],fov:42}} dpr={[1,1.5]}><ambientLight intensity={1.8}/><pointLight position={[3,4,4]} intensity={17} color="#ffd9e1"/><pointLight position={[-4,-2,2]} intensity={10} color="#ffe4a8"/><Rakhi3D/><Particles/></Canvas></div>}
-export default function App(){const audioRef=useRef(null);const[ started,setStarted]=useState(false),[muted,setMuted]=useState(false),[letterOpen,setLetterOpen]=useState(false),[memory,setMemory]=useState(null),[progress,setProgress]=useState(0);useEffect(()=>{const f=()=>{const m=document.documentElement.scrollHeight-innerHeight;setProgress(m>0?scrollY/m*100:0)};addEventListener("scroll",f,{passive:true});f();return()=>removeEventListener("scroll",f)},[]);const start=async()=>{setStarted(true);try{await audioRef.current.play()}catch{}confetti({particleCount:150,spread:100,startVelocity:28,origin:{y:.72}})};const toggle=async()=>{if(!started)await start();if(!audioRef.current)return;audioRef.current.muted=!audioRef.current.muted;setMuted(audioRef.current.muted)};const celebrate=()=>confetti({particleCount:240,spread:120,startVelocity:34,scalar:1.05,origin:{y:.62}});const scrollTo=id=>document.getElementById(id)?.scrollIntoView({behavior:"smooth"});return <main><audio ref={audioRef} data-rakhi-player preload="auto"/><div className="scroll-progress"><span style={{width:`${progress}%`}}/></div><AnimatePresence>{!started&&<motion.div className="welcome" initial={{opacity:1}} exit={{opacity:0,pointerEvents:"none"}}><motion.div className="welcome-card" initial={{opacity:0,y:30,scale:.96}} animate={{opacity:1,y:0,scale:1}} transition={{delay:.25,duration:.7}}><span className="tiny-label">A LITTLE SOMETHING FROM HOME</span><div className="welcome-rakhi">🧿</div><p>For our little sister, all the way in Australia 🇦🇺</p><h1>Put your headphones on.</h1><p className="welcome-sub">Do not rush this. Hum dono bhaiyon ne tere liye ek chhoti si journey banayi hai.</p><button className="primary-btn" onClick={start}><Heart size={18} fill="currentColor"/> Enter your surprise</button><small>Music starts when you enter ♫</small></motion.div></motion.div>}</AnimatePresence><button className="sound-btn" onClick={toggle}>{muted?<VolumeX size={18}/>:<Volume2 size={18}/>}</button><section className="hero"><ThreeScene/><div className="hero-glow"/><motion.div className="hero-content" initial={{opacity:0,y:35}} animate={{opacity:1,y:0}} transition={{delay:.15,duration:1}}><div className="eyebrow">🇮🇳 India <span>→</span> Australia 🇦🇺</div><p className="distance">10,000+ km apart · one family</p><h1>For our favourite<br/><em>little sister.</em> ❤️</h1><p className="subtext">Ye website nahi hai. Ye hum teen ki story ka ek chhota sa corner hai — kuch hasi, kuch memories, aur woh baatein jo WhatsApp message mein kabhi fit nahi hoti.</p><motion.button className="primary-btn" whileHover={{scale:1.05}} whileTap={{scale:.96}} onClick={()=>scrollTo("story")}><Sparkles size={18}/> Start our story</motion.button><button className="scroll-btn" onClick={()=>scrollTo("story")}><ArrowDown size={17}/> take your time</button></motion.div></section><section id="story" className="intro section-pad"><div className="story-intro"><span className="tiny-label">BEFORE WE GO ANYWHERE</span><h2>Some people are part of your life.<br/><em>Hum teen ek dusre ki story hain.</em></h2><p>Do bhai. Ek choti behen. Aur ek bond jo explain nahi hota.</p><div className="long-copy"><p>Hum teen jab saath bade ho rahe the tab shayad kisi ne nahi socha tha ki ye random days future mein itne precious lagenge. Kabhi bina wajah ladna, kabhi ek dusre ki side lena, kabhi kisi ki complaint mummy papa tak pahunchana, aur kabhi bina kisi reason ke ek saath hasna — ye sab life ka normal background noise tha.</p><p>Phir life badli. Tu choti se badi hui, aur dekhte dekhte Australia chali gayi. Tab samajh aaya ki family ki value bade occasions mein nahi, un choti choti everyday moments mein hoti hai jinke baare mein humne kabhi socha bhi nahi tha.</p></div><button className="text-btn" onClick={()=>scrollTo("memories")}>Let's go back for a minute <ChevronRight size={16}/></button></div></section><section id="memories" className="memories section-pad"><div className="section-heading"><span>MEMORIES · PHOTOS + VIDEOS</span><h2>Click a memory.<br/><em>Watch it. Feel it. Keep it.</em></h2><p>Hum teen ki photos aur videos — ek little cinematic scrapbook ki tarah.</p></div><MediaGallery/></section><section className="chapter-section section-pad"><div className="section-heading"><span>THE BIGGER PICTURE</span><h2>Five chapters.<br/><em>One ridiculous bond.</em></h2></div><div className="chapter-list">{chapters.map(([t,d],i)=><motion.div className="chapter-row" key={t} initial={{opacity:0,x:-25}} whileInView={{opacity:1,x:0}} viewport={{once:true}} transition={{delay:i*.08}}><div className="chapter-num">0{i+1}</div><div><h3>{t}</h3><p>{d}</p></div><Star size={16}/></motion.div>)}</div></section><section className="timeline-section section-pad"><div className="section-heading"><span>FROM THEN TO NOW</span><h2>Life changed.<br/><em>Hum teen nahi.</em></h2></div><div className="timeline">{chapters.map(([year,text],i)=><motion.div className="timeline-item" key={year} initial={{opacity:0,x:i%2?30:-30}} whileInView={{opacity:1,x:0}} viewport={{once:true}}><div className="timeline-dot"/><div><span>{year}</span><p>{text}</p><p className="timeline-extra">Kabhi loud, kabhi emotional, kabhi completely pagal. But always ours.</p></div></motion.div>)}</div></section><section className="fun-section section-pad"><div className="section-heading"><span>OFFICIAL SIBLING REPORT</span><h2>Proof that <em>hum teen normal nahi hain.</em> 😂</h2><p>Do bhai + ek choti behen = impossible combination.</p></div><div className="fun-grid">{[["Choti behen ka drama","CERTIFIED"],["Do bhai ki advice","UNSOLICITED"],["“Bas 2 minute”","NEVER 2 MINUTES"],["Group chat chaos","24 × 7"],["Ek joke, teen hasi","LOUDLY"],["Favourite little sister","UNFORTUNATELY ❤️"]].map(([a,b],i)=><motion.div className="fun-card" key={a} whileHover={{rotate:i%2?-2:2,y:-6}}><span>0{i+1}</span><h3>{a}</h3><strong>{b}</strong></motion.div>)}</div></section><section className="map-section section-pad"><div className="globe-wrap"><div className="globe"><div className="india-pin">🇮🇳</div><div className="australia-pin">🇦🇺</div><div className="flight-line"><Plane size={18}/></div></div></div><div className="map-copy"><span className="tiny-label">THE DISTANCE</span><h2>Different skies.<br/><em>Same family.</em></h2><p>Ab pehle jaisa nahi hai ki kisi room se awaaz aayi aur hum turant pooch lein kya hua. Ab message bhejna padta hai, call ka time dekhna padta hai, aur kabhi kabhi bas photo dekh kar hi feel hota hai ki tu ghar ke paas hai.</p><p>Par distance ne humari equation ka address badla hai, importance nahi. Tu Australia mein apni life bana rahi hai, aur hum dono bhai yahan se tere liye genuinely proud hain.</p><div className="route"><MapPin size={15}/> INDIA <span>──────── ✈ ────────</span> AUSTRALIA</div></div></section><section className="letter-section section-pad"><div className="letter-wrap"><div className="letter-top"><span>A MESSAGE FROM BOTH BROTHERS</span><Sparkles size={18}/></div><h2>Some things are easier<br/><em>to write than say.</em></h2><p className="letter-lead">Ye woh baatein hain jo hum shayad normal call par kabhi properly nahi bolenge.</p><motion.button className="envelope" onClick={()=>setLetterOpen(true)} whileHover={{scale:1.025,rotate:-1}} whileTap={{scale:.98}}><div className="envelope-flap"/><Heart size={42} fill="currentColor"/><span>Open our letter</span></motion.button></div></section><section className="finale section-pad"><MapPin size={18}/><p>Australia 🇦🇺 ↔ India 🇮🇳</p><h2>Distance: a lot.<br/><em>Hum teen: always.</em></h2><p className="final-copy">Kabhi Australia se ghar yaad aaye, toh is little corner par wapas aa jaana. Yahan hum teen ki story hamesha saved rahegi.</p><motion.button className="primary-btn" whileHover={{scale:1.06}} onClick={celebrate}>Happy Raksha Bandhan ❤️</motion.button><p className="footer-note">Made with ❤️ by your two annoying brothers.</p></section><AnimatePresence>{memory!==null&&<motion.div className="memory-backdrop" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}><motion.div className="memory-modal" initial={{opacity:0,scale:.92,y:30}} animate={{opacity:1,scale:1,y:0}} exit={{opacity:0,scale:.96}}><button className="close-btn" onClick={()=>setMemory(null)}><X size={20}/></button><div className="memory-modal-image"><img src={memories[memory].image} alt=""/></div><div className="memory-modal-copy"><span>{memories[memory].kicker}</span><h2>{memories[memory].title}</h2><p>{memories[memory].text}</p><p>{memories[memory].detail}</p><div className="memory-nav"><button disabled={memory===0} onClick={()=>setMemory(memory-1)}><ChevronLeft size={16}/> Previous</button><strong>{memory+1} / {memories.length}</strong><button disabled={memory===memories.length-1} onClick={()=>setMemory(memory+1)}>Next <ChevronRight size={16}/></button></div></div></motion.div></motion.div>}</AnimatePresence><AnimatePresence>{letterOpen&&<motion.div className="modal-backdrop" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} onClick={()=>setLetterOpen(false)}><motion.div className="letter-modal" initial={{opacity:0,scale:.88,y:28}} animate={{opacity:1,scale:1,y:0}} exit={{opacity:0,scale:.95}} onClick={e=>e.stopPropagation()}><button className="close-btn" onClick={()=>setLetterOpen(false)}><X size={20}/></button><span className="tiny-label">DEAR LITTLE SIS ❤️</span><h2>To our choti behen,<br/>wherever you are.</h2><p>Tu hum dono se choti hai, aur shayad isi wajah se hum dono ko hamesha lagega ki tujhe thoda protect karna hai — chahe tu kitni bhi badi ho jaaye. Humari fights, teasing aur random arguments apni jagah hain, but underneath all of that there is one simple thing: hum dono tujhe bahut pyaar karte hain.</p><p>Australia jaana tere liye ek huge step tha. Naya country, naye log, nayi responsibilities aur ghar se itni door apni life banana easy nahi hota. Hum har difficult moment mein physically tere paas nahi ho sakte, but please kabhi ye mat sochna ki tu akeli hai. Tere peeche do bhai khade hain — ek advice dene ke liye aur doosra bina maange bakwaas advice dene ke liye. 😂</p><p>Rakhi par sabse zyada ajeeb ye lagta hai ki tu saamne nahi hai. Pehle Rakhi ka matlab tha ek din, ek thread, sweets aur family ke saath time. Ab wohi Rakhi ek reminder ban gayi hai ki distance kitna bhi ho, hum teen ka connection kisi airport, ocean ya time zone se break nahi hota.</p><p>Apni life khul ke jee. Galtiyan kar, seekh, travel kar, naye dreams chase kar. Aur jab kabhi homesick feel ho, ya bas kisi se bina reason baat karni ho, call kar dena. Hum dono available hain — haan, shayad pehle thoda tease karenge, but uske baad sunenge bhi. ❤️</p><p className="love-line">Happy Raksha Bandhan, choti. Hum dono ki taraf se — always proud of you, always here for you. 🫶</p><button className="letter-close" onClick={()=>setLetterOpen(false)}><LockKeyhole size={15}/> Keep this between us</button></motion.div></motion.div>}</AnimatePresence></main>}
+function Rakhi3D() {
+  const group = useRef(),
+    gem = useRef();
+  useFrame(({ clock }, delta) => {
+    if (!group.current) return;
+    group.current.rotation.y += delta * 0.24;
+    group.current.rotation.x = Math.sin(clock.elapsedTime * 0.7) * 0.09;
+    group.current.position.y = Math.sin(clock.elapsedTime * 1.1) * 0.15;
+    if (gem.current) gem.current.rotation.z += delta * 0.55;
+  });
+  const petals = Array.from({ length: 12 }, (_, i) => {
+    const a = (i / 12) * Math.PI * 2;
+    return (
+      <mesh
+        key={i}
+        position={[Math.cos(a) * 0.68, Math.sin(a) * 0.68, 0]}
+        scale={[0.3, 0.15, 0.1]}
+        rotation={[0, 0, a]}
+      >
+        <sphereGeometry args={[1, 20, 14]} />
+        <meshStandardMaterial
+          color="#d66f88"
+          roughness={0.28}
+          metalness={0.25}
+        />
+      </mesh>
+    );
+  });
+  return (
+    <group ref={group}>
+      <mesh>
+        <torusGeometry args={[1.3, 0.085, 24, 96]} />
+        <meshStandardMaterial
+          color="#e4a3b1"
+          roughness={0.22}
+          metalness={0.5}
+        />
+      </mesh>
+      {petals}
+      <mesh ref={gem} position={[0, 0, 0.18]}>
+        <icosahedronGeometry args={[0.43, 2]} />
+        <meshStandardMaterial
+          color="#f4ca67"
+          roughness={0.14}
+          metalness={0.8}
+          emissive="#7a4f10"
+          emissiveIntensity={0.12}
+        />
+      </mesh>
+      <mesh position={[0, 0, 0.5]}>
+        <sphereGeometry args={[0.105, 20, 20]} />
+        <meshStandardMaterial
+          color="#fff4ca"
+          emissive="#ffd66e"
+          emissiveIntensity={1.1}
+        />
+      </mesh>
+    </group>
+  );
+}
+function Particles() {
+  const ref = useRef(),
+    count = 130,
+    positions = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 8;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 7;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 3;
+  }
+  useFrame(({ clock }) => {
+    if (ref.current) ref.current.rotation.y = clock.elapsedTime * 0.02;
+  });
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={count}
+          array={positions}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <pointsMaterial size={0.032} color="#e6a9b7" transparent opacity={0.72} />
+    </points>
+  );
+}
+function ThreeScene() {
+  return (
+    <div className="three-scene" aria-hidden="true">
+      <Canvas camera={{ position: [0, 0, 5.6], fov: 42 }} dpr={[1, 1.5]}>
+        <ambientLight intensity={1.8} />
+        <pointLight position={[3, 4, 4]} intensity={17} color="#ffd9e1" />
+        <pointLight position={[-4, -2, 2]} intensity={10} color="#ffe4a8" />
+        <Rakhi3D />
+        <Particles />
+      </Canvas>
+    </div>
+  );
+}
+export default function App() {
+  const audioRef = useRef(null);
+  const [started, setStarted] = useState(false),
+    [muted, setMuted] = useState(false),
+    [letterOpen, setLetterOpen] = useState(false),
+    [memory, setMemory] = useState(null),
+    [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const f = () => {
+      const m = document.documentElement.scrollHeight - innerHeight;
+      setProgress(m > 0 ? (scrollY / m) * 100 : 0);
+    };
+    addEventListener("scroll", f, { passive: true });
+    f();
+    return () => removeEventListener("scroll", f);
+  }, []);
+  const start = async () => {
+    setStarted(true);
+    try {
+      await audioRef.current.play();
+    } catch {}
+    confetti({
+      particleCount: 150,
+      spread: 100,
+      startVelocity: 28,
+      origin: { y: 0.72 },
+    });
+  };
+  const toggle = async () => {
+    if (!started) await start();
+    if (!audioRef.current) return;
+    audioRef.current.muted = !audioRef.current.muted;
+    setMuted(audioRef.current.muted);
+  };
+  const celebrate = () =>
+    confetti({
+      particleCount: 240,
+      spread: 120,
+      startVelocity: 34,
+      scalar: 1.05,
+      origin: { y: 0.62 },
+    });
+  const scrollTo = (id) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  return (
+    <main>
+      <audio ref={audioRef} data-rakhi-player preload="auto" />
+      <div className="scroll-progress">
+        <span style={{ width: `${progress}%` }} />
+      </div>
+      <AnimatePresence>
+        {!started && (
+          <motion.div
+            className="welcome"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, pointerEvents: "none" }}
+          >
+            <motion.div
+              className="welcome-card"
+              initial={{ opacity: 0, y: 30, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.25, duration: 0.7 }}
+            >
+              <span className="tiny-label">A LITTLE SOMETHING FROM HOME</span>
+              <div className="welcome-rakhi">🧿</div>
+              <p>For our little sister, all the way in Australia 🇦🇺</p>
+              <h1>Put your headphones on.</h1>
+              <p className="welcome-sub">
+                Do not rush this. Hum dono bhaiyon ne tere liye ek chhoti si
+                journey banayi hai.
+              </p>
+              <button className="primary-btn" onClick={start}>
+                <Heart size={18} fill="currentColor" /> Enter your surprise
+              </button>
+              <small>Music starts when you enter ♫</small>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <button className="sound-btn" onClick={toggle}>
+        {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+      </button>
+      <section className="hero">
+        <ThreeScene />
+        <div className="hero-glow" />
+        <motion.div
+          className="hero-content"
+          initial={{ opacity: 0, y: 35 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 1 }}
+        >
+          <div className="eyebrow">
+            🇮🇳 India <span>→</span> Australia 🇦🇺
+          </div>
+          <p className="distance">10,000+ km apart · one family</p>
+          <h1>
+            For our favourite
+            <br />
+            <em>little sister.</em> ❤️
+          </h1>
+          <p className="subtext">
+            Ye website nahi hai. Ye hum teen ki story ka ek chhota sa corner hai
+            — kuch hasi, kuch memories, aur woh baatein jo WhatsApp message mein
+            kabhi fit nahi hoti.
+          </p>
+          <motion.button
+            className="primary-btn"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => scrollTo("story")}
+          >
+            <Sparkles size={18} /> Start our story
+          </motion.button>
+          <button className="scroll-btn" onClick={() => scrollTo("story")}>
+            <ArrowDown size={17} /> take your time
+          </button>
+        </motion.div>
+      </section>
+      <section id="story" className="intro section-pad">
+        <div className="story-intro">
+          <span className="tiny-label">BEFORE WE GO ANYWHERE</span>
+          <h2>
+            Some people are part of your life.
+            <br />
+            <em>Hum teen ek dusre ki story hain.</em>
+          </h2>
+          <p>Do bhai. Ek choti behen. Aur ek bond jo explain nahi hota.</p>
+          <div className="long-copy">
+            <p>
+              Hum teen jab saath bade ho rahe the tab shayad kisi ne nahi socha
+              tha ki ye random days future mein itne precious lagenge. Kabhi
+              bina wajah ladna, kabhi ek dusre ki side lena, kabhi kisi ki
+              complaint mummy papa tak pahunchana, aur kabhi bina kisi reason ke
+              ek saath hasna — ye sab life ka normal background noise tha.
+            </p>
+            <p>
+              Phir life badli. Tu choti se badi hui, aur dekhte dekhte Australia
+              chali gayi. Tab samajh aaya ki family ki value bade occasions mein
+              nahi, un choti choti everyday moments mein hoti hai jinke baare
+              mein humne kabhi socha bhi nahi tha.
+            </p>
+          </div>
+          <button className="text-btn" onClick={() => scrollTo("memories")}>
+            Let's go back for a minute <ChevronRight size={16} />
+          </button>
+        </div>
+      </section>
+      <section id="memories" className="memories section-pad">
+        <div className="section-heading">
+          <span>MEMORIES · PHOTOS + VIDEOS</span>
+          <h2>
+            Click a memory.
+            <br />
+            <em>Watch it. Feel it. Keep it.</em>
+          </h2>
+          <p>
+            Hum teen ki photos aur videos — ek little cinematic scrapbook ki
+            tarah.
+          </p>
+        </div>
+        <MediaGallery />
+      </section>
+
+      <section className="map-section section-pad">
+        <div className="globe-wrap">
+          <div className="globe">
+            <div className="india-pin">🇮🇳</div>
+            <div className="australia-pin">🇦🇺</div>
+            <div className="flight-line">
+              <Plane size={18} />
+            </div>
+          </div>
+        </div>
+        <div className="map-copy">
+          <span className="tiny-label">THE DISTANCE</span>
+          <h2>
+            Different skies.
+            <br />
+            <em>Same family.</em>
+          </h2>
+          <p>
+            Ab pehle jaisa nahi hai ki kisi room se awaaz aayi aur hum turant
+            pooch lein kya hua. Ab message bhejna padta hai, call ka time dekhna
+            padta hai, aur kabhi kabhi bas photo dekh kar hi feel hota hai ki tu
+            ghar ke paas hai.
+          </p>
+          <p>
+            Par distance ne humari equation ka address badla hai, importance
+            nahi. Tu Australia mein apni life bana rahi hai, aur hum dono bhai
+            yahan se tere liye genuinely proud hain.
+          </p>
+          <div className="route">
+            <MapPin size={15} /> INDIA <span>──────── ✈ ────────</span>{" "}
+            AUSTRALIA
+          </div>
+        </div>
+      </section>
+      <section className="letter-section section-pad">
+        <div className="letter-wrap">
+          <div className="letter-top">
+            <span>A MESSAGE FROM BOTH BROTHERS</span>
+            <Sparkles size={18} />
+          </div>
+          <h2>
+            Some things are easier
+            <br />
+            <em>to write than say.</em>
+          </h2>
+          <p className="letter-lead">
+            Ye woh baatein hain jo hum shayad normal call par kabhi properly
+            nahi bolenge.
+          </p>
+          <motion.button
+            className="envelope"
+            onClick={() => setLetterOpen(true)}
+            whileHover={{ scale: 1.025, rotate: -1 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="envelope-flap" />
+            <Heart size={42} fill="currentColor" />
+            <span>Open our letter</span>
+          </motion.button>
+        </div>
+      </section>
+      <section className="finale section-pad">
+        <MapPin size={18} />
+        <p>Australia 🇦🇺 ↔ India 🇮🇳</p>
+        <h2>
+          Distance: a lot.
+          <br />
+          <em>Hum teen: always.</em>
+        </h2>
+        <p className="final-copy">
+          Kabhi Australia se ghar yaad aaye, toh is little corner par wapas aa
+          jaana. Yahan hum teen ki story hamesha saved rahegi.
+        </p>
+        <motion.button
+          className="primary-btn"
+          whileHover={{ scale: 1.06 }}
+          onClick={celebrate}
+        >
+          Happy Raksha Bandhan ❤️
+        </motion.button>
+        <p className="footer-note">
+          Made with ❤️ by your two annoying brothers.
+        </p>
+      </section>
+      <AnimatePresence>
+        {memory !== null && (
+          <motion.div
+            className="memory-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="memory-modal"
+              initial={{ opacity: 0, scale: 0.92, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+            >
+              <button className="close-btn" onClick={() => setMemory(null)}>
+                <X size={20} />
+              </button>
+              <div className="memory-modal-image">
+                <img src={memories[memory].image} alt="" />
+              </div>
+              <div className="memory-modal-copy">
+                <span>{memories[memory].kicker}</span>
+                <h2>{memories[memory].title}</h2>
+                <p>{memories[memory].text}</p>
+                <p>{memories[memory].detail}</p>
+                <div className="memory-nav">
+                  <button
+                    disabled={memory === 0}
+                    onClick={() => setMemory(memory - 1)}
+                  >
+                    <ChevronLeft size={16} /> Previous
+                  </button>
+                  <strong>
+                    {memory + 1} / {memories.length}
+                  </strong>
+                  <button
+                    disabled={memory === memories.length - 1}
+                    onClick={() => setMemory(memory + 1)}
+                  >
+                    Next <ChevronRight size={16} />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {letterOpen && (
+          <motion.div
+            className="modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setLetterOpen(false)}
+          >
+            <motion.div
+              className="letter-modal"
+              initial={{ opacity: 0, scale: 0.88, y: 28 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="close-btn"
+                onClick={() => setLetterOpen(false)}
+              >
+                <X size={20} />
+              </button>
+              <span className="tiny-label">DEAR LITTLE SIS ❤️</span>
+              <h2>
+                To our choti behen,
+                <br />
+                wherever you are.
+              </h2>
+              <p>
+                Tu hum dono se choti hai, aur shayad isi wajah se hum dono ko
+                hamesha lagega ki tujhe thoda protect karna hai — chahe tu kitni
+                bhi badi ho jaaye. Humari fights, teasing aur random arguments
+                apni jagah hain, but underneath all of that there is one simple
+                thing: hum dono tujhe bahut pyaar karte hain.
+              </p>
+              <p>
+                Australia jaana tere liye ek huge step tha. Naya country, naye
+                log, nayi responsibilities aur ghar se itni door apni life
+                banana easy nahi hota. Hum har difficult moment mein physically
+                tere paas nahi ho sakte, but please kabhi ye mat sochna ki tu
+                akeli hai. Tere peeche do bhai khade hain — ek advice dene ke
+                liye aur doosra bina maange bakwaas advice dene ke liye. 😂
+              </p>
+              <p>
+                Rakhi par sabse zyada ajeeb ye lagta hai ki tu saamne nahi hai.
+                Pehle Rakhi ka matlab tha ek din, ek thread, sweets aur family
+                ke saath time. Ab wohi Rakhi ek reminder ban gayi hai ki
+                distance kitna bhi ho, hum teen ka connection kisi airport,
+                ocean ya time zone se break nahi hota.
+              </p>
+              <p>
+                Apni life khul ke jee. Galtiyan kar, seekh, travel kar, naye
+                dreams chase kar. Aur jab kabhi homesick feel ho, ya bas kisi se
+                bina reason baat karni ho, call kar dena. Hum dono available
+                hain — haan, shayad pehle thoda tease karenge, but uske baad
+                sunenge bhi. ❤️
+              </p>
+              <p className="love-line">
+                Happy Raksha Bandhan, choti. Hum dono ki taraf se — always proud
+                of you, always here for you. 🫶
+              </p>
+              <button
+                className="letter-close"
+                onClick={() => setLetterOpen(false)}
+              >
+                <LockKeyhole size={15} /> Keep this between us
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </main>
+  );
+}

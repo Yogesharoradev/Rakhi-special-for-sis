@@ -8,12 +8,12 @@ const COPY = {
   },
   hero: {
     distance: '3 siblings · 2 brothers · 1 little sister · same home',
-    title: <>For our favourite<br/><em>little troublemaker.</em> ❤️</>,
+    title: 'For our favourite little troublemaker. ❤️',
     sub: 'Teen log, hazaar memories. Do bhai aur beech mein hamari sabse choti si jaan — jo choti toh hai, par attitude dono bhaiyon se zyada hai.'
   },
   intro: {
     eyebrow: 'BEFORE WE GO ANYWHERE',
-    title: <>Hum teen ki kahani simple si hai.<br/><em>Do bhai, ek choti behen — aur unlimited bakchodi.</em></>,
+    title: 'Hum teen ki kahani simple si hai. Do bhai, ek choti behen — aur unlimited bakchodi.',
     lead: 'Aur honestly, tere bina hum dono ki story adhuri hai.',
     p1: 'Bachpan mein kabhi nahi socha tha ki ek din hum itne bade ho jayenge ki ghar ke woh normal se din yaad aayenge. Teenon ka ek saath rehna, bina kisi reason ke ladna, ek doosre ki cheezein chura lena, mummy se complain karna aur phir paanch minute baad saath mein hasna — tab sab kuch normal lagta tha. Aaj samajh aata hai ki wahi normal days actually hamari sabse precious memories thi.',
     p2: 'Aur sabse funny baat? Tu hum dono se choti hai, lekin ghar mein rules banane ka confidence tera hamesha sabse zyada raha. Hum dono bhai sochte the hum tujhe protect kar rahe hain, aur tu shayad secretly hum dono ko manage kar rahi thi. 😂',
@@ -21,7 +21,7 @@ const COPY = {
   },
   memories: {
     label: 'CHAPTERS 01—04',
-    title: <>Teen log. <br/><em>Hazaar yaadein.</em></>,
+    title: 'Teen log. Hazaar yaadein.',
     sub: 'Photo pe click kar — har memory ke peeche ek poori kahani hai.'
   },
   chapters: [
@@ -40,7 +40,7 @@ const COPY = {
   ],
   fun: {
     label: 'OFFICIAL HUM-TEEN REPORT',
-    title: <>Proof that our <em>little sister</em> is actually dangerous. 😂</>,
+    title: 'Proof that our little sister is actually dangerous. 😂',
     sub: 'Do bhai agree karte hain. Rare event hai, screenshot le le.'
   },
   funCards: [
@@ -53,13 +53,13 @@ const COPY = {
   ],
   distance: {
     label: 'THE DISTANCE',
-    title: <>Different countries.<br/><em>Same three people.</em></>,
+    title: 'Different countries. Same three people.',
     p1: 'Australia aur India ke beech ka distance map pe dekhne mein bas ek number hai. Lekin jab ghar mein koi ek person missing ho, tab wahi distance thoda zyada feel hota hai. Pehle kuch bolna hota tha toh bas room mein aa jaate the. Ab message bhejna padta hai, time-zone dekhna padta hai, call ka wait karna padta hai.',
     p2: 'Par ek cheez distance nahi kar sakta — hum teen ko alag. Tu Australia mein apni life build kar, naye dreams chase kar, naye memories bana. Idhar do bhai hamesha ready hain tujhe annoy karne ke liye. ❤️'
   },
   letter: {
     label: 'A MESSAGE FROM BOTH BROTHERS',
-    title: <>Kuch baatein dono bhai<br/><em>ek saath bolna chahte hain.</em></>,
+    title: 'Kuch baatein dono bhai ek saath bolna chahte hain.',
     lead: 'Is baar Rakhi par sirf ek message nahi. Thoda dil se likha hai.'
   },
   letterParagraphs: [
@@ -72,34 +72,83 @@ const COPY = {
   ],
   finale: {
     line: 'Australia 🇦🇺 ↔ India 🇮🇳 · 3 siblings · 1 forever bond',
-    title: <>Distance: bahut zyada.<br/><em>Hum teen: hamesha saath.</em></>,
+    title: 'Distance: bahut zyada. Hum teen: hamesha saath.',
     copy: 'Jab bhi ghar ya hum dono bhai yaad aayein, is page par wapas aa jaana. Yeh choti si website nahi — hum teen ki ek choti si jagah hai. ❤️',
     footer: 'Made with ❤️ by your two annoying brothers.'
   }
 };
 
 export function applySiblingCopy() {
-  const set = (selector, value) => { const el = document.querySelector(selector); if (el && typeof value === 'string') el.textContent = value; };
+  const set = (selector, value) => {
+    const el = document.querySelector(selector);
+    if (el && typeof value === 'string') el.textContent = value;
+  };
+
   set('.welcome-card > p', COPY.welcome.line);
   set('.welcome-card h1', COPY.welcome.title);
   set('.welcome-card .welcome-sub', COPY.welcome.sub);
   set('.hero-content .distance', COPY.hero.distance);
-  set('.hero-content h1', 'For our favourite little troublemaker. ❤️');
+  set('.hero-content h1', COPY.hero.title);
   set('.hero-content .subtext', COPY.hero.sub);
   set('.story-intro > .tiny-label', COPY.intro.eyebrow);
-  set('.story-intro h2', 'Hum teen ki kahani simple si hai. Do bhai, ek choti behen — aur unlimited bakchodi.');
+  set('.story-intro h2', COPY.intro.title);
   set('.story-intro > p', COPY.intro.lead);
-  const long = document.querySelectorAll('.story-intro .long-copy p'); if (long[0]) long[0].textContent = COPY.intro.p1; if (long[1]) long[1].textContent = COPY.intro.p2;
+  const long = document.querySelectorAll('.story-intro .long-copy p');
+  if (long[0]) long[0].textContent = COPY.intro.p1;
+  if (long[1]) long[1].textContent = COPY.intro.p2;
   set('.story-intro .text-btn', COPY.intro.button);
   set('#memories .section-heading > span', COPY.memories.label);
-  set('#memories .section-heading h2', 'Teen log. Hazaar yaadein.');
+  set('#memories .section-heading h2', COPY.memories.title);
   set('#memories .section-heading > p', COPY.memories.sub);
-  document.querySelectorAll('.chapter-row').forEach((el,i)=>{ if(COPY.chapters[i]){el.querySelector('h3').textContent=COPY.chapters[i][0];el.querySelector('p').textContent=COPY.chapters[i][1];} });
-  document.querySelectorAll('.timeline-item').forEach((el,i)=>{ if(COPY.timeline[i]){el.querySelector('span').textContent=COPY.timeline[i][0];el.querySelector('p').textContent=COPY.timeline[i][1];el.querySelector('.timeline-extra').textContent='Kuch memories loud thi, kuch simple — par sab hum teen ki thi.';} });
-  set('.fun-section .section-heading > span', COPY.fun.label); set('.fun-section .section-heading h2','Proof that our little sister is actually dangerous. 😂'); set('.fun-section .section-heading > p',COPY.fun.sub);
-  document.querySelectorAll('.fun-card').forEach((el,i)=>{if(COPY.funCards[i]){el.querySelector('h3').textContent=COPY.funCards[i][0];el.querySelector('strong').textContent=COPY.funCards[i][1];}});
-  set('.map-copy .tiny-label',COPY.distance.label); set('.map-copy h2','Different countries. Same three people.'); const mp=document.querySelectorAll('.map-copy > p'); if(mp[0])mp[0].textContent=COPY.distance.p1;if(mp[1])mp[1].textContent=COPY.distance.p2;
-  set('.letter-top span',COPY.letter.label); set('.letter-wrap h2','Kuch baatein dono bhai ek saath bolna chahte hain.'); set('.letter-lead',COPY.letter.lead);
-  const lp=document.querySelectorAll('.letter-modal p'); COPY.letterParagraphs.forEach((t,i)=>{if(lp[i])lp[i].textContent=t;});
-  set('.finale > p:first-of-type',COPY.finale.line); set('.finale h2','Distance: bahut zyada. Hum teen: hamesha saath.'); set('.final-copy',COPY.finale.copy); set('.footer-note',COPY.finale.footer);
+
+  document.querySelectorAll('.chapter-row').forEach((el, i) => {
+    if (COPY.chapters[i]) {
+      const h = el.querySelector('h3');
+      const p = el.querySelector('p');
+      if (h) h.textContent = COPY.chapters[i][0];
+      if (p) p.textContent = COPY.chapters[i][1];
+    }
+  });
+
+  document.querySelectorAll('.timeline-item').forEach((el, i) => {
+    if (COPY.timeline[i]) {
+      const span = el.querySelector('span');
+      const p = el.querySelector('p');
+      const extra = el.querySelector('.timeline-extra');
+      if (span) span.textContent = COPY.timeline[i][0];
+      if (p) p.textContent = COPY.timeline[i][1];
+      if (extra) extra.textContent = 'Kuch memories loud thi, kuch simple — par sab hum teen ki thi.';
+    }
+  });
+
+  set('.fun-section .section-heading > span', COPY.fun.label);
+  set('.fun-section .section-heading h2', COPY.fun.title);
+  set('.fun-section .section-heading > p', COPY.fun.sub);
+  document.querySelectorAll('.fun-card').forEach((el, i) => {
+    if (COPY.funCards[i]) {
+      const h = el.querySelector('h3');
+      const strong = el.querySelector('strong');
+      if (h) h.textContent = COPY.funCards[i][0];
+      if (strong) strong.textContent = COPY.funCards[i][1];
+    }
+  });
+
+  set('.map-copy .tiny-label', COPY.distance.label);
+  set('.map-copy h2', COPY.distance.title);
+  const mp = document.querySelectorAll('.map-copy > p');
+  if (mp[0]) mp[0].textContent = COPY.distance.p1;
+  if (mp[1]) mp[1].textContent = COPY.distance.p2;
+
+  set('.letter-top span', COPY.letter.label);
+  set('.letter-wrap h2', COPY.letter.title);
+  set('.letter-lead', COPY.letter.lead);
+  const lp = document.querySelectorAll('.letter-modal p');
+  COPY.letterParagraphs.forEach((text, i) => {
+    if (lp[i]) lp[i].textContent = text;
+  });
+
+  set('.finale > p:first-of-type', COPY.finale.line);
+  set('.finale h2', COPY.finale.title);
+  set('.final-copy', COPY.finale.copy);
+  set('.footer-note', COPY.finale.footer);
 }

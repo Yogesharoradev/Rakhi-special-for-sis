@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Camera, Film, X, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import "./media-gallery.css";
@@ -22,10 +22,43 @@ const MEDIA = [
 
 export default function MediaGallery() {
   const [active, setActive] = useState(null);
-  const open = (index) => setActive(index);
-  const close = () => setActive(null);
-  const prev = () => setActive((i) => (i === 0 ? MEDIA.length - 1 : i - 1));
-  const next = () => setActive((i) => (i === MEDIA.length - 1 ? 0 : i + 1));
+
+  const open = (index) => {
+    setActive(index);
+    window.dispatchEvent(new Event("rakhi:memory-open"));
+  };
+
+  const close = (goNext = false) => {
+    setActive(null);
+    window.dispatchEvent(new Event("rakhi:memory-close"));
+    if (goNext) {
+      setTimeout(() => {
+        const target = document.getElementById("after-memories") || document.getElementById("love-you");
+        target?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+    }
+  };
+
+  const prev = () => setActive((i) => (i > 0 ? i - 1 : i));
+
+  const next = () => {
+    if (active === MEDIA.length - 1) {
+      close(true);
+      return;
+    }
+    setActive((i) => i + 1);
+  };
+
+  useEffect(() => {
+    if (active === null) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [active]);
 
   return (
     <>
@@ -64,13 +97,13 @@ export default function MediaGallery() {
 
       <AnimatePresence>
         {active !== null && (
-          <motion.div className="media-lightbox" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={close}>
-            <button className="media-close" onClick={close}><X size={21} /></button>
-            <button className="media-arrow media-prev" onClick={(e) => { e.stopPropagation(); prev(); }}><ChevronLeft size={24} /></button>
+          <motion.div className="media-lightbox" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => close()}>
+            <button className="media-close" onClick={() => close()}><X size={21} /></button>
+            <button className="media-arrow media-prev" disabled={active === 0} onClick={(e) => { e.stopPropagation(); prev(); }}><ChevronLeft size={24} /></button>
             <motion.div className="media-lightbox-card" initial={{ scale: .94, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: .97 }} onClick={(e) => e.stopPropagation()}>
               <div className="media-lightbox-visual">
                 {MEDIA[active].type === "video" ? (
-                  <video src={MEDIA[active].src} controls autoPlay playsInline />
+                  <video key={MEDIA[active].src} src={MEDIA[active].src} controls autoPlay playsInline />
                 ) : (
                   <img src={MEDIA[active].src} alt={MEDIA[active].title} />
                 )}
@@ -78,10 +111,12 @@ export default function MediaGallery() {
               <div className="media-lightbox-copy">
                 <span>{MEDIA[active].label} · {active + 1} / {MEDIA.length}</span>
                 <h2>{MEDIA[active].title}</h2>
-                <p>{MEDIA[active].type === "video" ? "Isko play karke poora moment feel kar — photos sirf memory dikhati hain, videos uss moment ki awaaz bhi wapas le aate hain. ❤️" : "Ek photo, ek moment, aur hum teen ki ek aur chhoti si kahani. Aise hi ordinary moments baad mein sabse zyada yaad aate hain. ❤️"}</p>
+                <p>{MEDIA[active].type === "video" ? "Music thodi der ke liye ruk gayi hai — ab bas iss moment ko feel kar. ❤️" : "Ek photo, ek moment, aur hum teen ki ek aur chhoti si kahani. ❤️"}</p>
               </div>
             </motion.div>
-            <button className="media-arrow media-next" onClick={(e) => { e.stopPropagation(); next(); }}><ChevronRight size={24} /></button>
+            <button className="media-arrow media-next" onClick={(e) => { e.stopPropagation(); next(); }}>
+              {active === MEDIA.length - 1 ? <X size={24} /> : <ChevronRight size={24} />}
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

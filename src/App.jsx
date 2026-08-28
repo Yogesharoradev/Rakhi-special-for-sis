@@ -503,7 +503,6 @@ export default function App() {
               <h2>
                 To our choti behen,
                 <br />
-                wherever you are.
               </h2>
               <p>
                 Tu hum dono se choti hai, aur shayad isi wajah se hum dono ko
@@ -513,12 +512,13 @@ export default function App() {
                 thing: hum dono tujhe bahut pyaar karte hain.
               </p>
               <p>
-                Australia jaana tere liye ek huge step tha. Naya country, naye
-                log, nayi responsibilities aur ghar se itni door apni life
-                banana easy nahi hota. Hum har difficult moment mein physically
-                tere paas nahi ho sakte, but please kabhi ye mat sochna ki tu
-                akeli hai. Tere peeche do bhai khade hain — ek advice dene ke
-                liye aur doosra bina maange bakwaas advice dene ke liye. 😂
+                Shadi karna and Australia jaana tere liye ek huge step tha. Naya
+                country, naye log, nayi responsibilities aur ghar se itni door
+                apni life banana easy nahi hota. Hum har difficult moment mein
+                physically tere paas nahi ho sakte, but please kabhi ye mat
+                sochna ki tu akeli hai. Tere peeche do bhai khade hain — ek
+                advice dene ke liye aur doosra bina maange bakwaas advice dene
+                ke liye. 😂
               </p>
               <p>
                 Rakhi par sabse zyada ajeeb ye lagta hai ki tu saamne nahi hai.
@@ -533,6 +533,11 @@ export default function App() {
                 bina reason baat karni ho, call kar dena. Hum dono available
                 hain — haan, shayad pehle thoda tease karenge, but uske baad
                 sunenge bhi. ❤️
+              </p>
+              <p>
+                and humm sabhi harvind par proud hai ❤️ ki itna caring and
+                hmesha sth dena wala pati mila .... tum dono hmesha khush rho yh
+                mummy papa bhaiya meri trf se alot of blessings
               </p>
               <p className="love-line">
                 Happy Raksha Bandhan, choti. Hum dono ki taraf se — always proud

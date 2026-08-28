@@ -4,66 +4,36 @@ const TRACKS = ["/audio/song-1.mp3", "/audio/song-2.mp3"];
 
 export default function MusicPlaylist() {
   useEffect(() => {
-    const audio =
-      document.querySelector("audio[data-rakhi-player]") ||
-      document.querySelector("audio");
+    const audio = document.querySelector("audio[data-rakhi-player]");
     if (!audio) return;
 
     let trackIndex = 0;
     let switching = false;
-
     audio.loop = false;
     audio.preload = "auto";
-    audio.src = TRACKS[0];
-    audio.load();
 
-    const playCurrent = async () => {
-      try {
-        await audio.play();
-      } catch (error) {
-        console.warn("Rakhi music needs a user gesture:", error);
-      }
+    const loadTrack = (index, autoplay = false) => {
+      trackIndex = index;
+      audio.src = TRACKS[trackIndex];
+      audio.load();
+      if (autoplay) audio.play().catch(() => {});
     };
+
+    const playCurrent = () => audio.play().catch(() => {});
 
     const handleEnded = async () => {
       if (switching) return;
       switching = true;
-      trackIndex = (trackIndex + 1) % TRACKS.length;
-      audio.src = TRACKS[trackIndex];
-      audio.load();
-      try {
-        await audio.play();
-      } catch {}
+      loadTrack((trackIndex + 1) % TRACKS.length, true);
       switching = false;
-    };
-
-    const handleError = () => {
-      if (switching) return;
-      switching = true;
-      trackIndex = (trackIndex + 1) % TRACKS.length;
-      audio.src = TRACKS[trackIndex];
-      audio.load();
-      switching = false;
-    };
-
-    const handleFirstClick = (event) => {
-      const button = event.target.closest("button");
-      if (!button) return;
-      const text = button.textContent?.toLowerCase() || "";
-      if (text.includes("enter your surprise")) playCurrent();
     };
 
     audio.addEventListener("ended", handleEnded);
-    audio.addEventListener("error", handleError);
-    document.addEventListener("click", handleFirstClick, true);
-
-    audio.dataset.rakhiPlaylistReady = "true";
+    loadTrack(0);
     window.startRakhiMusic = playCurrent;
 
     return () => {
       audio.removeEventListener("ended", handleEnded);
-      audio.removeEventListener("error", handleError);
-      document.removeEventListener("click", handleFirstClick, true);
       delete window.startRakhiMusic;
     };
   }, []);
